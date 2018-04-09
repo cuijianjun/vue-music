@@ -10,8 +10,41 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
-
+    proxyTable: {
+      '/api/getDiscList': {
+        target: 'https://c.y.qq.com/splcloud/fcgi-bin/fcg_get_diss_by_tag.fcg',
+        changeOrigin: true,
+        bypass: function(req, res, proxyOptions){
+          req.headers.referer = 'https://c.y.qq.com'
+          req.headers.host = 'c.y.qq.com'
+        },
+        pathRewrite: {
+          '^/api/getDiscList': ''
+        }
+      },
+      '/api/getSongList': {
+        target: 'https://c.y.qq.com/qzone/fcg-bin/fcg_ucc_getcdinfo_byids_cp.fcg',
+        changeOrigin: true,
+        bypass: function(req, res, proxyOptions){
+          req.headers.referer = 'https://c.y.qq.com/'
+          req.headers.host = 'c.y.qq.com'
+        },
+        pathRewrite: {
+          '^/api/getSongList': ''
+        }
+      },
+      '/api/lyric': {
+        target: 'https://c.y.qq.com/lyric/fcgi-bin/fcg_query_lyric_new.fcg',
+        changeOrigin: true,
+        bypass: function(req, res, proxyOptions){
+          req.headers.referer = 'https://c.y.qq.com/'
+          req.headers.host = 'c.y.qq.com'
+        },
+        pathRewrite: {
+          '^/api/lyric': ''
+        }
+      }
+    },
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST
     port: 8080, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
