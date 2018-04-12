@@ -12,7 +12,27 @@
 
 <script type="text/ecmascript-6">
   export default {
-    name: 'music-list'
+    name: 'music-list',
+    props: {
+      bgImage: {
+        type: String,
+        default: ''
+      },
+      songs: {
+        type: Array,
+        default: () => {
+          return []
+        }
+      },
+      title: {
+        type: String,
+        default: ''
+      },
+      rank: {
+        type: Boolean,
+        default: false
+      }
+    }
   }
 </script>
 
