@@ -1,5 +1,7 @@
-import {getSongs} from '@/api/song'
+import {getSongs, getLyric} from 'api/song'
 import {ERR_OK, Guid} from '@/api/config'
+import {Base64} from 'js-base64'
+
 export default class Song {
   constructor({id, mid, singer, name, album, duration, image, url}) {
     this.id = id
@@ -10,6 +12,32 @@ export default class Song {
     this.duration = duration
     this.image = image
     this.url = url
+  }
+  getLyric() {
+    if (this.lyric) {
+      return Promise.resolve(this.lyric)
+    }
+
+    return new Promise((resolve, reject) => {
+      getLyric(this.mid).then((res) => {
+        // 判断返回字符是否为字符串 处理jsoncallback为字符串的情况
+        if (typeof res === 'string') {
+          let reg = /^\w+\(({[^()]+})\)$/ // 处理callback数据
+          let matches = res.match(reg) // match 检索是否存在数值
+          if (matches) {
+            // json转换
+            let ret = JSON.parse(matches[1])
+            if (ret.retcode === ERR_OK) {
+              this.lyric = Base64.decode(ret.lyric)
+              console.log(this.lyric)
+              resolve(this.lyric)
+            } else {
+              reject(new Error('no lyric'))
+            }
+          }
+        }
+      })
+    })
   }
 }
 

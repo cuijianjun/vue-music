@@ -26,20 +26,20 @@ export function getSongs (songmid) {
 }
 
 // 获取歌词
-export function getLyric (songmid) {
+export function getLyric(mid) {
+  const url = '/api/lyric'
   const data = Object.assign({}, commonParams, {
-    g_tk: 190876849,
-    hostUin: 0,
-    notice: 0,
+    songmid: mid,
     platform: 'yqq',
+    hostUin: 0,
     needNewCode: 0,
+    categoryId: 10000000,
     pcachetime: +new Date(),
-    songmid: songmid,
-    callback: 'MusicJsonCallback_lrc',
-    jsonpCallback: 'MusicJsonCallback_lrc'
+    format: 'json'
   })
-  // 代理请求并且返回
-  return axios.post('/lyric', data).then((res) => {
+  return axios.get(url, {
+    params: data
+  }).then((res) => {
     return Promise.resolve(res.data)
   })
 }
