@@ -8,7 +8,7 @@
   import {mapGetters} from 'vuex'
   import {getSingerDetail} from 'api/singer'
   import {ERR_OK} from 'api/config'
-  import {createSong} from 'common/js/song'
+  import {createSong, getSongUrl} from 'common/js/song'
   import MusicList from 'components/music-list/music-list'
 
   export default {
@@ -51,6 +51,11 @@
             ret.push(createSong(musicData))
           }
         })
+        // 循环添加歌曲地址
+        ret.forEach(item => {
+          getSongUrl(item, item.mid)
+        })
+        console.log(ret)
         return ret
       }
     },

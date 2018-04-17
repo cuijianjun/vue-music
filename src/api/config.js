@@ -11,3 +11,6 @@ export const options = {
 }
 
 export const ERR_OK = 0
+
+// 歌曲识别码Guid 用于拼接歌曲播放地址
+export const Guid = 8283044720
