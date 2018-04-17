@@ -55,7 +55,6 @@
         ret.forEach(item => {
           getSongUrl(item, item.mid)
         })
-        console.log(ret)
         return ret
       }
     },
