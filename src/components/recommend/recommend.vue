@@ -1,12 +1,12 @@
 <template>
-  <div class="recommend">
+  <div class="recommend" ref="recommend">
     <scroll class="recommend-content" ref="scroll" :data="discList">
       <div>
         <div v-if='recommends.length' class="slider-wrapper">
           <slider>
             <div v-for="(item,index) in recommends" :key="index">
               <a :href="item.linkUrl">
-                <img class="needsclick" @load="loadImage" :src="item.picUrl" >
+                <img class="needsclick" @load="loadImage" :src="item.picUrl">
               </a>
             </div>
           </slider>
@@ -41,47 +41,54 @@
   import Slider from 'base/slider/slider'
   import {getRecommend, getDiscList} from 'api/recommend'
   import {ERR_OK} from 'api/config'
+  import {playlistMixin} from 'common/js/mixin'
 
   export default {
-  name: 'recommend',
-  data() {
-    return {
-      recommends: [],
-      discList: []
-    }
-  },
-  created() {
-    this._getRecommend()
-    this._getDiscList()
-  },
-  methods: {
-    _getRecommend() {
-      getRecommend().then((res) => {
-        if (res.code === ERR_OK) {
-          this.recommends = res.data.slider
-        }
-      })
-    },
-    _getDiscList() {
-      getDiscList().then((res) => {
-        if (res.code === ERR_OK) {
-          this.discList = res.data.list
-        }
-      })
-    },
-    loadImage() {
-      if (!this.checkloaded) {
-        this.checkloaded = true
-        this.$refs.scroll.refresh()
+    name: 'recommend',
+    mixin: [playlistMixin],
+    data() {
+      return {
+        recommends: [],
+        discList: []
       }
+    },
+    created() {
+      this._getRecommend()
+      this._getDiscList()
+    },
+    methods: {
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '60px' : ''
+        this.$refs.recommend.style.bottom = bottom
+        this.$refs.scroll.refresh()
+      },
+      _getRecommend() {
+        getRecommend().then((res) => {
+          if (res.code === ERR_OK) {
+            this.recommends = res.data.slider
+          }
+        })
+      },
+      _getDiscList() {
+        getDiscList().then((res) => {
+          if (res.code === ERR_OK) {
+            this.discList = res.data.list
+          }
+        })
+      },
+      loadImage() {
+        if (!this.checkloaded) {
+          this.checkloaded = true
+          this.$refs.scroll.refresh()
+        }
+      }
+    },
+    components: {
+      Slider,
+      Scroll,
+      Loading
     }
-  },
-  components: {
-    Slider,
-    Scroll,
-    Loading
   }
-}
 </script>
 
 <style scoped lang="stylus" rel="stylesheet/stylus">
