@@ -17,7 +17,11 @@
           <h1 class="title" v-html="currentSong.name"></h1>
           <h2 class="subtitle" v-html="currentSong.singer"></h2>
         </div>
-        <div class="middle">
+        <div class="middle"
+          @touchstart.prevent = 'middleTouchStart'
+          @touchmove.prevent = 'middleTouchMove'
+          @touchend.prevent = 'middleTouchEnd'
+        >
           <div class="middle-l" ref="middleL">
             <div class="cd-wrapper" ref="cdWrapper">
               <div class="cd" :class = 'cdCls'>
@@ -37,6 +41,10 @@
           </scroll>
         </div>
         <div class="bottom">
+          <div class="dot-wrapper">
+            <span class="dot" :class="{'active':currentShow === 'cd'}"></span>
+            <span class="dot" :class="{'active':currentShow === 'lyric'}"></span>
+          </div>
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
@@ -109,7 +117,8 @@
         radius: 32,
         currentLyric: '',
         playingLyric: '',
-        currentLineNum: 0
+        currentLineNum: 0,
+        currentShow: 'cd'
       }
     },
     computed: {
@@ -141,7 +150,19 @@
         'sequenceList'
       ])
     },
+    created() {
+      this.touch = {}
+    },
     methods: {
+      middleTouchStart() {
+
+      },
+      middleTouchMove() {
+
+      },
+      middleTouchEnd() {
+        
+      },
       getLyric() {
         this.currentSong.getLyric().then((lyric) => {
           if (this.currentSong.lyric !== lyric) {
