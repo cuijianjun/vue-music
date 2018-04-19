@@ -15,3 +15,7 @@ export const currentIndex = state => state.currentIndex
 export const currentSong = (state) => {
   return state.playlist[state.currentIndex] || {}
 }
+
+export const disc = state => state.disc // 推荐歌单列表
+
+export const topList = state => state.topList
