@@ -32,6 +32,10 @@
       refreshDelay: {
         type: Number,
         default: 20
+      },
+      pullup: {
+        type: Boolean,
+        default: false
       }
     },
     mounted() {
@@ -52,6 +56,19 @@
           let _self = this
           this.scroll.on('scroll', (pos) => {
             _self.$emit('scroll', pos)
+          })
+        }
+        if (this.pullup) {
+          this.scroll.on('scrollEnd', () => {
+            if (this.scroll.y <= (this.scroll.maxScrollY + 50)) {
+              this.$emit('scrollToEnd')
+            }
+          })
+        }
+        // 判断在滚动前的作用
+        if (this.beforeScroll) {
+          this.scroll.on('beforeScrollStart', () => {
+            this.$emit('beforeScroll')
           })
         }
       },
