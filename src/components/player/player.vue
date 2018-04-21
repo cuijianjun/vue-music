@@ -69,7 +69,7 @@
               <i class="icon-next" @click="next"></i>
             </div>
             <div class="icon i-right">
-              <i class="icon"></i>
+              <i class="icon" :class="getFavoriteIcon(currentSong)" @click="toggleFavorite(currentSong)"></i>
             </div>
           </div>
         </div>
@@ -95,7 +95,7 @@
       </div>
     </transition>
     <playlist ref="playlist"></playlist>
-    <audio ref="audio" :src="currentSong.url" @canplay='ready' @error="error" @timeupdate="updateTime"
+    <audio ref="audio" :src="currentSong.url" @play='ready' @error="error" @timeupdate="updateTime"
            @ended="end"></audio>
   </div>
 </template>
@@ -414,7 +414,8 @@
         if (this.currentLyric) {
           this.currentLyric.stop()
         }
-        setTimeout(() => {
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
           this.$refs.audio.play()
           this.getLyric()
         }, 1000)
